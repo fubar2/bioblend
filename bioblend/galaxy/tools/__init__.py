@@ -19,8 +19,8 @@ class ToolClient(Client):
         or ``tool_id``. Provide only one argument, ``name`` or ``tool_id``,
         but not both.
 
-        If ``name`` is set and multiple names match the given name, all the
-        tools matching the argument will be returned.
+        If ``name`` is set and ``name`` is "*", all tools are returned. Otherwise, 
+        all the tools matching the argument will be returned if any, or an empty list.
 
         :type tool_id: str
         :param tool_id: id of the requested tool
@@ -42,7 +42,10 @@ class ToolClient(Client):
             tool = next((_ for _ in tools if _['id'] == tool_id), None)
             tools = [tool] if tool is not None else []
         elif name is not None:
-            tools = [_ for _ in tools if _['name'] == name]
+            if ( name == '*'):
+	    	tools = [_ for _ in tools]
+            else:
+                tools = [_ for _ in tools if _['name'] == name]
         return tools
 
     def get_tool_panel(self):
